@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} ゲーム1 
    Caption         =   "赤点回避シミュレーター"
-   ClientHeight    =   12210
+   ClientHeight    =   12000
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   18960
+   ClientWidth     =   19200
    OleObjectBlob   =   "ゲーム1.frx":0000
    StartUpPosition =   1  'オーナー フォームの中央
 End
@@ -20,26 +20,22 @@ Option Explicit
     Dim Kokugo As Integer '国語パラメータ
     Dim Sugaku As Integer '数学パラメータ
     Dim Eigo As Integer '英語パラメータ
-    Dim Neru As Integer '寝る確率
     '＃＃＃＃＃値保存＃＃＃＃＃
     Dim Hi As Integer '日
     Dim Zikan As Integer '時間
-    Dim Skyoka As Integer '教科値
     Dim TBen As Boolean '2時間勉強
-    Dim x As Integer
-    Dim y As Integer
+    Dim Skyoka As Integer '教科値
+    Dim X As Integer
+    Dim Y As Integer
     '＃＃＃＃＃文字保存＃＃＃＃＃
     Dim Youbi(7) As String '曜日
     Dim Hzikan(14) As String '平日時間表示
     Dim Kzikan(10) As String '休日時間表示
     Dim Kyoka(5) As String '教科
-    '〇グローバル変数
-    Public Kamoku As Integer '科目保存
-    Public Ktai As Boolean 'スマホ使用
-    
+
 Private Sub UserForm_Initialize()
     '＃＃＃＃＃ゲーム説明の表示＃＃＃＃＃
-    説明.Show
+    ウィンドウ2.Show
     '＃＃＃＃＃文字列の保存＃＃＃＃＃
     Youbi(1) = "月曜日": Youbi(2) = "火曜日": Youbi(3) = "水曜日": Youbi(4) = "木曜日": Youbi(5) = "金曜日": Youbi(6) = "土曜日": Youbi(7) = "日曜日"
     Hzikan(1) = "1時限目": Hzikan(2) = "2時限目": Hzikan(3) = "3時限目": Hzikan(4) = "4時限目": Hzikan(5) = "5時限目": Hzikan(6) = "6時限目": _
@@ -53,16 +49,23 @@ Private Sub UserForm_Initialize()
     通知1.Caption = "今日は" & Hi & "日目、" & Youbi(Hi Mod 8) & "です"
     '時間の保存
     Zikan = 1
-    通知2.Caption = "今は" & Hzikan(Zikan) & "です"
+    通知2.Caption = "次は" & Hzikan(Zikan) & "です"
     '教科の保存
     Call 教科
-    'パラメータ表示の保存
-    やる気.Caption = "やる気 ☆☆☆☆☆☆☆☆☆☆"
-    国語.Caption = "国語 ☆☆☆☆☆☆☆☆☆☆"
-    数学.Caption = "数学 ☆☆☆☆☆☆☆☆☆☆"
-    英語.Caption = "英語 ☆☆☆☆☆☆☆☆☆☆"
     '確率初期値
     Neru = 20 '寝る確率（初期値20）
+    'コメント・名前
+    コメント.Caption = "「今日から一週間で赤点を回避してみせる！赤点を回避する必要があるのは国語と数学、そして英語であとは捨て教科だ！」"
+    '背景
+    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室1.jpg")
+End Sub
+
+Private Sub セーブ_Click()
+
+End Sub
+
+Private Sub ロード_Click()
+
 End Sub
 
 Private Sub 次へ_Click()
@@ -73,22 +76,22 @@ Private Sub 次へ_Click()
             TBen = False
             Call 学校学習
             Call 教科
-            通知2.Caption = "今は" & Hzikan(Zikan) & "です"
+            通知2.Caption = "次は" & Hzikan(Zikan) & "です"
         ElseIf Zikan < 11 Then '（常）家勉
             TBen = False
             Call 家庭学習
             通知3.Caption = ""
-            通知2.Caption = "今は" & Hzikan(Zikan) & "です"
+            通知2.Caption = "次は" & Hzikan(Zikan) & "です"
             If Zikan = 10 Then '睡眠選択準備
-                Call 睡眠選択
+                ゲーム3.Show
             End If
         Else '（特）家勉
-            If Zikan = 10 + y Then '寝る時間
+            If Zikan = 10 + Nzikan Then '寝る時間
                 Call 日付進行
             End If
             TBen = True
             Call 家庭学習
-            通知2.Caption = "今は" & Hzikan(Zikan) & "です"
+            通知2.Caption = "次は" & Hzikan(Zikan) & "です"
         End If
     ElseIf Hi < 8 Then '休日
         Zikan = Zikan + 1
@@ -96,17 +99,17 @@ Private Sub 次へ_Click()
         If Zikan < 7 Then '（常）家勉
             TBen = True
             Call 家庭学習
-            通知2.Caption = "今は" & Kzikan(Zikan) & "です"
+            通知2.Caption = "次は" & Kzikan(Zikan) & "です"
             If Zikan = 6 Then
-                Call 睡眠選択
+                ゲーム3.Show
             End If
         Else '（特）家勉
-            If Zikan = 6 + y Then '寝る時間
+            If Zikan = 6 + Nzikan Then '寝る時間
                 Call 日付進行
             End If
             TBen = True
             Call 家庭学習
-            通知2.Caption = "今は" & Kzikan(Zikan) & "です"
+            通知2.Caption = "次は" & Kzikan(Zikan) & "です"
         End If
     ElseIf Hi = 8 Then 'テスト当日
         Call 日付進行
@@ -118,16 +121,8 @@ Private Sub 学校学習()
     Dim Sumaho As Integer 'スマホ使用保存
     Dim KNeru As Integer '寝る確率結果
     Dim Naisyoku As Integer '内職ばれる
-    Dim Gakusen As Integer '学習選択保存
     '本プログラム
-    For x = 1 To 4 '学習選択
-        If Me.Controls("勉強" & x).Value = True Then
-            Gakusen = x
-        End If
-    Next x
-    If Me.Controls("スマホ").Value = True Then 'スマホ使用確認
-        Ktai = True
-    End If
+    ゲーム2.Show
     If Ktai = True Then 'スマホを使う
         Randomize 'スマホがばれる確率（初期値2分の1）
         Sumaho = Int((2 - 1 + 1) * Rnd + 1)
@@ -136,99 +131,118 @@ Private Sub 学校学習()
             KNeru = Int((100 - 1 + 1) * Rnd + 1)
             If KNeru > Neru Then '寝ない
                 Yaruki = Yaruki + 10
-                If Gakusen = Skyoka Or Gakusen = 4 Then '時間割と選択科目が同様の場合
-                    Select Case Gakusen
+                If Kamoku = Skyoka Or Kamoku = 6 Then '時間割と選択科目が同様の場合
+                    Select Case Kamoku
                         Case "1"
                             Kokugo = Kokugo + 10
                         Case "2"
                             Sugaku = Sugaku + 10
                         Case "3"
                             Eigo = Eigo + 10
-                        Case "4"
+                        Case "6"
                             Yaruki = Yaruki + 5
                     End Select
+                    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室1.jpg")
+                    コメント.Caption = "「この時間は計画通りに勉強できた！スマホもばれなくて勉強って楽しいな！」"
                 Else '時間割と選択科目が同様でない場合
                     Randomize '内職確率（初期値2分の1）
                     Naisyoku = Int((2 - 1 + 1) * Rnd + 1)
                     If Naisyoku = 1 Then '内職がばれない
-                        Select Case Gakusen
+                        Select Case Kamoku
                             Case "1"
                                 Kokugo = Kokugo + 10
                             Case "2"
                                 Sugaku = Sugaku + 10
                             Case "3"
                                 Eigo = Eigo + 10
-                            Case "4"
+                            Case "6"
                                 Yaruki = Yaruki + 5
                         End Select
+                        背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室4.jpg")
+                        コメント.Caption = "「この時間は計画通りに勉強できた！スマホも内職もばれなかった！この調子で勉強を進めていこう！」"
                     Else '内職がばれる
                         Yaruki = Yaruki - 20
+                        背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室2.jpg")
+                        コメント.Caption = "「しまった、さっきの時間は内職がばれて勉強どころじゃなかった…」"
                     End If
                 End If
+            Else '寝る
+                Yaruki = Yaruki - 20
+                背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室3.jpg")
+                コメント.Caption = "主人公は寝てしまった"
             End If
         Else  'スマホがばれる
             Yaruki = Yaruki - 35
+            背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室2.jpg")
+            コメント.Caption = "「最悪だ、スマホが没収されてしまった。新しいのを買わないと…」"
         End If
     Else 'スマホを使わない
         Randomize '寝る確率（初期値20）
         KNeru = Int((100 - 1 + 1) * Rnd + 1)
         If KNeru > Neru Then '寝ない
-            If Gakusen = Skyoka Or Gakusen = 4 Then '時間割と選択科目が同様の場合
-                Select Case Gakusen
+            If Kamoku = Skyoka Or Kamoku = 6 Then '時間割と選択科目が同様の場合
+                Select Case Kamoku
                     Case "1"
                         Kokugo = Kokugo + 10
                     Case "2"
                         Sugaku = Sugaku + 10
                     Case "3"
                         Eigo = Eigo + 10
-                    Case "4"
+                    Case "6"
                         Yaruki = Yaruki + 5
                 End Select
+                背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室1.jpg")
+                コメント.Caption = "「この時間は計画通りに勉強できた。やっぱり勉強はまじめにやるべきだ！」"
             Else '時間割と選択科目が同様でない場合
                 Randomize '内職確率（初期値2分の1）
                 Naisyoku = Int((2 - 1 + 1) * Rnd + 1)
                 If Naisyoku = 1 Then '内職がばれない
-                    Select Case Gakusen
+                    Select Case Kamoku
                         Case "1"
                             Kokugo = Kokugo + 10
                         Case "2"
                             Sugaku = Sugaku + 10
                         Case "3"
                             Eigo = Eigo + 10
-                        Case "4"
+                        Case "6"
                             Yaruki = Yaruki + 5
                     End Select
+                    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室4.jpg")
+                    コメント.Caption = "「この時間は計画通りに勉強できた。内職もばれなかった！この調子で勉強を進めていこう！」"
                 Else '内職がばれる
                     Yaruki = Yaruki - 20
+                    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室2.jpg")
+                    コメント.Caption = "「しまった、さっきの時間は内職がばれて勉強どころじゃなかった…」"
                 End If
             End If
+        Else '寝る
+            Yaruki = Yaruki - 20
+            背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室3.jpg")
+            コメント.Caption = "主人公は寝てしまった"
         End If
     End If
-    Label1.Caption = Yaruki
-    Label2.Caption = Kokugo
-    Label3.Caption = Sugaku
-    Label4.Caption = Eigo
+    Label1.Caption = Kokugo
+    Label2.Caption = Sugaku
+    Label3.Caption = Eigo
+    Label4.Caption = Yaruki
+    Label11.Caption = Kamoku
+    Label9.Caption = Ktai
+    Label13.Caption = KNeru
+    Label15.Caption = Neru
 End Sub
 
 Private Sub 家庭学習()
     '変数宣言
+    Dim Sumaho As Integer 'スマホ使用保存
     Dim KNeru As Integer '寝る確率結果
-    Dim Gakusen As Integer '学習選択保存
     '本プログラム
-    For x = 1 To 4 '学習選択
-        If Me.Controls("勉強" & x).Value = True Then
-            Gakusen = x
-        End If
-    Next x
-    If Me.Controls("スマホ").Value = True Then 'スマホ使用確認
-        Ktai = True
-    End If
+    ゲーム2.Show
     If Ktai = True Then 'スマホを使う
-        Randomize '寝る確率（初期値20）
+        Randomize '時間を無駄にする（初期値20）
         KNeru = Int((100 - 1 + 1) * Rnd + 1)
-        If KNeru > Neru Then '寝ない
+        If KNeru > Neru Then '時間を無駄にしない
             Yaruki = Yaruki + 10
-            Select Case Gakusen
+            Select Case Kamoku
                 Case "1"
                     Kokugo = Kokugo + 10
                     If TBen = True Then
@@ -244,14 +258,40 @@ Private Sub 家庭学習()
                     If TBen = True Then
                         Eigo = Eigo + 10
                     End If
-                Case "4"
-                    Yaruki = Yaruki + 5
+                Case "6"
+                    Yaruki = Yaruki + 10
             End Select
-        Else '寝る
+            Select Case Zikan
+                Case Is < 3
+                    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋1-4.jpg")
+                Case "3"
+                    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋4-4.jpg")
+                Case Is < 6
+                    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室1-4.jpg")
+                Case "6"
+                    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋2-4.jpg")
+                Case Is > 6
+                    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋3-4.jpg")
+            End Select
+            コメント.Caption = "「この時間は計画通りに勉強できた！スマホを使って勉強って楽しくて捗るな！」"
+        Else '時間を無駄にした
             Yaruki = Yaruki - 25
+            Select Case Zikan
+                Case Is < 3
+                    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋1-2.jpg")
+                Case "3"
+                    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋4-2.jpg")
+                Case Is < 6
+                    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室1-2.jpg")
+                Case "6"
+                    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋2-2.jpg")
+                Case Is > 6
+                    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋3-2.jpg")
+            End Select
+            コメント.Caption = "「最悪だ、スマホを使ったせいで時間を浪費してしまった。」"
         End If
     Else 'スマホを使わない
-        Select Case Gakusen
+        Select Case Kamoku
             Case "1"
                 Kokugo = Kokugo + 10
                 If TBen = True Then
@@ -267,37 +307,31 @@ Private Sub 家庭学習()
                 If TBen = True Then
                     Eigo = Eigo + 10
                 End If
-            Case "4"
-                Yaruki = Yaruki + 5
+            Case "6"
+                Yaruki = Yaruki + 10
         End Select
+        Select Case Zikan
+            Case Is < 3
+                背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋1-1.jpg")
+            Case "3"
+                背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋4-1.jpg")
+            Case Is < 6
+                背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室1-1.jpg")
+            Case "6"
+                背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋2-1.jpg")
+            Case Is > 6
+                背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋3-1.jpg")
+        End Select
+        コメント.Caption = "「この時間は計画通りに勉強できた。やっぱり勉強はまじめにやるべきだ！」"
     End If
-    Label1.Caption = Yaruki
-    Label2.Caption = Kokugo
-    Label3.Caption = Sugaku
-    Label4.Caption = Eigo
-End Sub
-
-Private Sub 睡眠選択()
-    For x = 1 To 4
-        If Me.Controls("睡眠" & x).Value = True Then
-            y = x
-        End If
-    Next x
-    Select Case y
-    Case "1"
-        If Neru > 0 Then
-            Neru = Neru - 5
-        End If
-    Case "2"
-    Case "3"
-        If Neru < 100 Then
-            Neru = Neru + 5
-        End If
-    Case "4"
-        If Neru < 95 Then
-            Neru = Neru + 10
-        End If
-    End Select
+    Label1.Caption = Kokugo
+    Label2.Caption = Sugaku
+    Label3.Caption = Eigo
+    Label4.Caption = Yaruki
+    Label11.Caption = Kamoku
+    Label9.Caption = Ktai
+    Label13.Caption = KNeru
+    Label15.Caption = Neru
 End Sub
 
 Private Sub 日付進行()
@@ -308,7 +342,7 @@ Private Sub 日付進行()
         通知1.Caption = "今日は" & "テストです！"
     ElseIf Hi > 8 Then '結果発表
         Unload Me
-        結果.Show
+        ウィンドウ3.Show
     End If
     Zikan = 1
     If Hi < 8 Then
@@ -317,15 +351,14 @@ Private Sub 日付進行()
 End Sub
 
 Private Sub 教科()
+    '変数宣言
+
+    'プログラム
     Randomize
     Skyoka = Int((5 - 1 + 1) * Rnd + 1)
-    通知3.Caption = Kyoka(Skyoka)
+    通知3.Caption = "次は" & Kyoka(Skyoka)
 End Sub
 
 Private Sub 終了_Click()
-    確認.Show
-End Sub
-
-Private Sub 寝る時間_Click()
-
+    ウィンドウ1.Show
 End Sub
