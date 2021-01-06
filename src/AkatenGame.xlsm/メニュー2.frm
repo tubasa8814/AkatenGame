@@ -18,11 +18,6 @@ Private Sub はじめから_Click()
     ゲーム1.Show
 End Sub
 
-Private Sub つづきから_Click()
-    Unload Me
-    メニュー3.Show
-End Sub
-
 Private Sub 戻る_Click()
     Unload Me
     メニュー1.Show
