@@ -80,7 +80,12 @@ Private Sub 選択1_Click()
             TutiSave2 = CStr(Z)
         Line Input #1, Z
             TutiSave3 = CStr(Z)
+        Line Input #1, Z
+            URLSave = CStr(Z)
         Close #1
+        Save = True
+    Else
+        Save = False
     End If
 End Sub
 
@@ -119,7 +124,12 @@ Private Sub 選択2_Click()
             TutiSave2 = CStr(Z)
         Line Input #1, Z
             TutiSave3 = CStr(Z)
+        Line Input #1, Z
+            URLSave = CStr(Z)
         Close #1
+        Save = True
+    Else
+        Save = False
     End If
 End Sub
 
@@ -158,10 +168,18 @@ Private Sub 選択3_Click()
             TutiSave2 = CStr(Z)
         Line Input #1, Z
             TutiSave3 = CStr(Z)
+        Line Input #1, Z
+            URLSave = CStr(Z)
         Close #1
+        Save = True
+    Else
+        Save = False
     End If
 End Sub
 
 Private Sub 戻る_Click()
     Unload Me
+    If Tuduki = True Then
+    ゲーム1.Show
+    End If
 End Sub

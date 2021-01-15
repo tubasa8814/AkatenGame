@@ -38,6 +38,7 @@ Private Sub UserForm_Initialize()
         Kzikan(6) = "19:00": Kzikan(7) = "21:00": Kzikan(8) = "22:00": Kzikan(9) = "24:00": Kzikan(10) = "02:00"
     Kyoka(1) = "国語": Kyoka(2) = "数学": Kyoka(3) = "英語": Kyoka(4) = "科学": Kyoka(5) = "日本史"
     '＃＃＃＃＃初期値の保存＃＃＃＃＃
+    If Tuduki = False Or Save = False Then
     '日付の保存
     Hi = 1
     通知1.Caption = "今日は" & Hi & "日目、" & Youbi(Hi Mod 8) & "です"
@@ -53,6 +54,20 @@ Private Sub UserForm_Initialize()
     コメント.Caption = "「今日から一週間で赤点を回避してみせる！赤点を回避する必要があるのは国語と数学、そして英語であとは捨て教科だ！」"
     '背景
     背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室1.jpg")
+    URLSave = ThisWorkbook.Path & "\..\gfx\セット\教室1.jpg"
+    Else
+        Hi = HiSave
+        Zikan = ZikanSave
+        Skyoka = SkyokaSave
+        名前.Caption = NameSave
+        コメント.Caption = CommentSave
+        通知1.Caption = TutiSave1
+        通知2.Caption = TutiSave2
+        通知3.Caption = TutiSave3
+        Call 現在値表示
+        背景1.Picture = LoadPicture(URLSave)
+    End If
+    枠.Caption = ""
 End Sub
 
 Private Sub セーブ_Click()
@@ -69,16 +84,19 @@ End Sub
 
 Private Sub ロード_Click()
     メニュー4.Show
-    Hi = HiSave
-    Zikan = ZikanSave
-    Skyoka = SkyokaSave
-    名前.Caption = NameSave
-    コメント.Caption = CommentSave
-    通知1.Caption = TutiSave1
-    通知2.Caption = TutiSave2
-    通知3.Caption = TutiSave3
-    Call 現在値表示
-    背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室1.jpg")
+    If Save = True Then
+        Hi = HiSave
+        Zikan = ZikanSave
+        Skyoka = SkyokaSave
+        名前.Caption = NameSave
+        コメント.Caption = CommentSave
+        通知1.Caption = TutiSave1
+        通知2.Caption = TutiSave2
+        通知3.Caption = TutiSave3
+        Call 現在値表示
+        背景1.Picture = LoadPicture(URLSave)
+    End If
+    枠.Caption = ""
 End Sub
 
 Private Sub 次へ_Click()
@@ -127,6 +145,7 @@ Private Sub 次へ_Click()
     ElseIf Hi = 8 Then 'テスト当日
         Call 日付進行
     End If
+    枠.Caption = ""
 End Sub
 
 Private Sub 学校学習()
@@ -153,9 +172,10 @@ Private Sub 学校学習()
                         Case "3"
                             Eigo = Eigo + 10
                         Case "6"
-                            Yaruki = Yaruki + 5
+                            Yaruki = Yaruki + 15
                     End Select
                     背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室1.jpg")
+                    URLSave = ThisWorkbook.Path & "\..\gfx\セット\教室1.jpg"
                     コメント.Caption = "「この時間は計画通りに勉強できた！スマホもばれなくて勉強って楽しいな！」"
                 Else '時間割と選択科目が同様でない場合
                     Randomize '内職確率（初期値2分の1）
@@ -169,24 +189,28 @@ Private Sub 学校学習()
                             Case "3"
                                 Eigo = Eigo + 10
                             Case "6"
-                                Yaruki = Yaruki + 5
+                                Yaruki = Yaruki + 15
                         End Select
                         背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室4.jpg")
+                        URLSave = ThisWorkbook.Path & "\..\gfx\セット\教室4.jpg"
                         コメント.Caption = "「この時間は計画通りに勉強できた！スマホも内職もばれなかった！この調子で勉強を進めていこう！」"
                     Else '内職がばれる
-                        Yaruki = Yaruki - 20
+                        Yaruki = Yaruki - 10
                         背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室2.jpg")
+                        URLSave = ThisWorkbook.Path & "\..\gfx\セット\教室2.jpg"
                         コメント.Caption = "「しまった、さっきの時間は内職がばれて勉強どころじゃなかった…」"
                     End If
                 End If
             Else '寝る
-                Yaruki = Yaruki - 20
+                Yaruki = Yaruki - 5
                 背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室3.jpg")
+                URLSave = ThisWorkbook.Path & "\..\gfx\セット\教室3.jpg"
                 コメント.Caption = "主人公は寝てしまった"
             End If
         Else  'スマホがばれる
-            Yaruki = Yaruki - 35
+            Yaruki = Yaruki - 15
             背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室2.jpg")
+            URLSave = ThisWorkbook.Path & "\..\gfx\セット\教室2.jpg"
             コメント.Caption = "「最悪だ、スマホが没収されてしまった。新しいのを買わないと…」"
         End If
     Else 'スマホを使わない
@@ -202,9 +226,10 @@ Private Sub 学校学習()
                     Case "3"
                         Eigo = Eigo + 10
                     Case "6"
-                        Yaruki = Yaruki + 5
+                        Yaruki = Yaruki + 15
                 End Select
                 背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室1.jpg")
+                URLSave = ThisWorkbook.Path & "\..\gfx\セット\教室1.jpg"
                 コメント.Caption = "「この時間は計画通りに勉強できた。やっぱり勉強はまじめにやるべきだ！」"
             Else '時間割と選択科目が同様でない場合
                 Randomize '内職確率（初期値2分の1）
@@ -218,23 +243,27 @@ Private Sub 学校学習()
                         Case "3"
                             Eigo = Eigo + 10
                         Case "6"
-                            Yaruki = Yaruki + 5
+                            Yaruki = Yaruki + 15
                     End Select
                     背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室4.jpg")
+                    URLSave = ThisWorkbook.Path & "\..\gfx\セット\教室4.jpg"
                     コメント.Caption = "「この時間は計画通りに勉強できた。内職もばれなかった！この調子で勉強を進めていこう！」"
                 Else '内職がばれる
-                    Yaruki = Yaruki - 20
+                    Yaruki = Yaruki - 10
                     背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室2.jpg")
+                    URLSave = ThisWorkbook.Path & "\..\gfx\セット\教室2.jpg"
                     コメント.Caption = "「しまった、さっきの時間は内職がばれて勉強どころじゃなかった…」"
                 End If
             End If
         Else '寝る
-            Yaruki = Yaruki - 20
+            Yaruki = Yaruki - 5
             背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室3.jpg")
+            URLSave = ThisWorkbook.Path & "\..\gfx\セット\教室3.jpg"
             コメント.Caption = "主人公は寝てしまった"
         End If
     End If
     Call 現在値表示
+    枠.Caption = ""
 End Sub
 
 Private Sub 家庭学習()
@@ -265,34 +294,47 @@ Private Sub 家庭学習()
                         Eigo = Eigo + 10
                     End If
                 Case "6"
-                    Yaruki = Yaruki + 10
+                    Yaruki = Yaruki + 15
+                    If TBen = True Then
+                        Yaruki = Yaruki + 15
+                    End If
             End Select
             Select Case Zikan
                 Case Is < 3
                     背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋1-4.jpg")
+                    URLSave = ThisWorkbook.Path & "\..\gfx\セット\部屋1-4.jpg"
                 Case "3"
                     背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋4-4.jpg")
+                    URLSave = ThisWorkbook.Path & "\..\gfx\セット\部屋4-4.jpg"
                 Case Is < 6
                     背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室1-4.jpg")
+                    URLSave = ThisWorkbook.Path & "\..\gfx\セット\教室1-4.jpg"
                 Case "6"
                     背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋2-4.jpg")
+                    URLSave = ThisWorkbook.Path & "\..\gfx\セット\部屋2-4.jpg"
                 Case Is > 6
                     背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋3-4.jpg")
+                    URLSave = ThisWorkbook.Path & "\..\gfx\セット\部屋3-4.jpg"
             End Select
             コメント.Caption = "「この時間は計画通りに勉強できた！スマホを使って勉強って楽しくて捗るな！」"
         Else '時間を無駄にした
-            Yaruki = Yaruki - 25
+            Yaruki = Yaruki - 15
             Select Case Zikan
                 Case Is < 3
                     背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋1-2.jpg")
+                    URLSave = ThisWorkbook.Path & "\..\gfx\セット\部屋1-2.jpg"
                 Case "3"
                     背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋4-2.jpg")
+                    URLSave = ThisWorkbook.Path & "\..\gfx\セット\部屋4-2.jpg"
                 Case Is < 6
                     背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\教室1-2.jpg")
+                    URLSave = ThisWorkbook.Path & "\..\gfx\セット\教室1-2.jpg"
                 Case "6"
                     背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋2-2.jpg")
+                    URLSave = ThisWorkbook.Path & "\..\gfx\セット\部屋2-2.jpg"
                 Case Is > 6
                     背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋3-2.jpg")
+                    URLSave = ThisWorkbook.Path & "\..\gfx\セット\部屋3-2.jpg"
             End Select
             コメント.Caption = "「最悪だ、スマホを使ったせいで時間を浪費してしまった。」"
         End If
@@ -314,23 +356,32 @@ Private Sub 家庭学習()
                     Eigo = Eigo + 10
                 End If
             Case "6"
-                Yaruki = Yaruki + 10
+                Yaruki = Yaruki + 15
+                If TBen = True Then
+                    Yaruki = Yaruki + 15
+                End If
         End Select
         Select Case Zikan
             Case Is < 3
                 背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋1-1.jpg")
+                URLSave = ThisWorkbook.Path & "\..\gfx\セット\部屋1-1.jpg"
             Case "3"
                 背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋4-1.jpg")
+                URLSave = ThisWorkbook.Path & "\..\gfx\セット\部屋4-1.jpg"
             Case Is < 6
                 背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋1-1.jpg")
+                URLSave = ThisWorkbook.Path & "\..\gfx\セット\部屋1-1.jpg"
             Case "6"
                 背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋2-1.jpg")
+                URLSave = ThisWorkbook.Path & "\..\gfx\セット\部屋2-1.jpg"
             Case Is > 6
                 背景1.Picture = LoadPicture(ThisWorkbook.Path & "\..\gfx\セット\部屋3-1.jpg")
+                URLSave = ThisWorkbook.Path & "\..\gfx\セット\部屋3-1.jpg"
         End Select
         コメント.Caption = "「この時間は計画通りに勉強できた。やっぱり勉強はまじめにやるべきだ！」"
     End If
     Call 現在値表示
+    枠.Caption = ""
 End Sub
 
 Private Sub 現在値表示()
@@ -394,6 +445,11 @@ Private Sub 現在値表示()
             Label4.Caption = Label4.Caption & "☆"
         Next Y
     End If
+    Label5.Caption = Kokugo
+    Label6.Caption = Sugaku
+    Label7.Caption = Eigo
+    Label8.Caption = Yaruki
+    枠.Caption = ""
 End Sub
 
 Private Sub 日付進行()
@@ -411,6 +467,7 @@ Private Sub 日付進行()
     If Hi < 8 Then
         Call 教科
     End If
+    枠.Caption = ""
 End Sub
 
 Private Sub 点数計算()
@@ -421,28 +478,38 @@ Private Sub 点数計算()
     '本プログラム
     If Yaruki >= 280 And Neru = 0 Then '満点100点
         KHozon = Int((Kokugo / 250) * 100)
+        If KHozon > 100 Then
+            KHozon = 100
+        End
         SHozon = Int((Sugaku / 250) * 100)
+        If SHozon > 100 Then
+            SHozon = 100
+        End
         EHozon = Int((Eigo / 250) * 100)
-    ElseIf Yaruki >= 200 And Neru <= 40 Then '満点65点
-        KHozon = Int((Kokugo / 250) * 65)
-        SHozon = Int((Sugaku / 250) * 65)
-        EHozon = Int((Eigo / 250) * 65)
-    ElseIf Yaruki >= 150 And Neru <= 40 Then '満点50点
-        KHozon = Int((Kokugo / 250) * 50)
-        SHozon = Int((Sugaku / 250) * 50)
-        EHozon = Int((Eigo / 250) * 50)
-    ElseIf Neru <= 40 Then '満点45点
-        KHozon = Int((Kokugo / 250) * 45)
-        SHozon = Int((Sugaku / 250) * 45)
-        EHozon = Int((Eigo / 250) * 45)
-    Else '満点40点
+        If EHozon > 100 Then
+            EHozon = 100
+        End
+    ElseIf Yaruki >= 240 And Neru <= 40 Then '満点70点
+        KHozon = Int((Kokugo / 250) * 70)
+        SHozon = Int((Sugaku / 250) * 70)
+        EHozon = Int((Eigo / 250) * 70)
+    ElseIf Yaruki >= 180 And Neru <= 40 Then '満点40点
         KHozon = Int((Kokugo / 250) * 40)
         SHozon = Int((Sugaku / 250) * 40)
         EHozon = Int((Eigo / 250) * 40)
+    ElseIf Neru <= 40 Then '満点35点
+        KHozon = Int((Kokugo / 250) * 35)
+        SHozon = Int((Sugaku / 250) * 35)
+        EHozon = Int((Eigo / 250) * 35)
+    Else '満点30点
+        KHozon = Int((Kokugo / 250) * 30)
+        SHozon = Int((Sugaku / 250) * 30)
+        EHozon = Int((Eigo / 250) * 30)
     End If
     Kokugo = KHozon
     Sugaku = SHozon
     Eigo = EHozon
+    枠.Caption = ""
 End Sub
 
 Private Sub 教科()
@@ -452,6 +519,7 @@ Private Sub 教科()
     Randomize
     Skyoka = Int((5 - 1 + 1) * Rnd + 1)
     通知3.Caption = "次は" & Kyoka(Skyoka)
+    枠.Caption = ""
 End Sub
 
 Private Sub 終了_Click()

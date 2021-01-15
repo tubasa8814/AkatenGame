@@ -63,6 +63,7 @@ Private Sub 選択1_Click()
     Print #1, TutiSave1
     Print #1, TutiSave2
     Print #1, TutiSave3
+    Print #1, URLSave
     Close #1
     選択内容1.Caption = "セーブがあります" & Chr(13) & Chr(10) & _
         TutiSave1 & "   " & TutiSave2 & "   " & TutiSave3
@@ -86,6 +87,7 @@ Private Sub 選択2_Click()
     Print #1, TutiSave1
     Print #1, TutiSave2
     Print #1, TutiSave3
+    Print #1, URLSave
     Close #1
     選択内容2.Caption = "セーブがあります" & Chr(13) & Chr(10) & _
         TutiSave1 & "   " & TutiSave2 & "   " & TutiSave3
@@ -109,6 +111,7 @@ Private Sub 選択3_Click()
     Print #1, TutiSave1
     Print #1, TutiSave2
     Print #1, TutiSave3
+    Print #1, URLSave
     Close #1
     選択内容3.Caption = "セーブがあります" & Chr(13) & Chr(10) & _
         TutiSave1 & "   " & TutiSave2 & "   " & TutiSave3

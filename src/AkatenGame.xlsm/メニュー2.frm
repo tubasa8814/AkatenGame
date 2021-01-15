@@ -13,6 +13,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Private Sub ‚Â‚Ã‚«‚©‚ç_Click()
+    Tuduki = True
+    Unload Me
+    ƒƒjƒ…[4.Show
+End Sub
+
 Private Sub ‚Í‚¶‚ß‚©‚ç_Click()
     Unload Me
     ƒQ[ƒ€1.Show

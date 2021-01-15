@@ -19,6 +19,10 @@ Attribute VB_Name = "変数宣言"
     Public TutiSave1 As String '通知1
     Public TutiSave2 As String '通知2
     Public TutiSave3 As String '通知3
+    Public URLSave As String '画像アドレス
+    Public Save As Boolean 'セーブ用フラグ
+    'つづきから用
+    Public Tuduki As Boolean 'つづきからフラグ
     
     
     
