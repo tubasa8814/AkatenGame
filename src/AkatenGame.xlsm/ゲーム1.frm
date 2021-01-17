@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} ゲーム1 
    Caption         =   "赤点回避シミュレーター"
-   ClientHeight    =   12000
+   ClientHeight    =   11985
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   19200
+   ClientWidth     =   19185
    OleObjectBlob   =   "ゲーム1.frx":0000
    StartUpPosition =   1  'オーナー フォームの中央
 End
@@ -68,6 +68,7 @@ Private Sub UserForm_Initialize()
         背景1.Picture = LoadPicture(URLSave)
     End If
     枠.Caption = ""
+    Tuduki = False
 End Sub
 
 Private Sub セーブ_Click()
@@ -480,15 +481,15 @@ Private Sub 点数計算()
         KHozon = Int((Kokugo / 250) * 100)
         If KHozon > 100 Then
             KHozon = 100
-        End
+        End If
         SHozon = Int((Sugaku / 250) * 100)
         If SHozon > 100 Then
             SHozon = 100
-        End
+        End If
         EHozon = Int((Eigo / 250) * 100)
         If EHozon > 100 Then
             EHozon = 100
-        End
+        End If
     ElseIf Yaruki >= 240 And Neru <= 40 Then '満点70点
         KHozon = Int((Kokugo / 250) * 70)
         SHozon = Int((Sugaku / 250) * 70)
